@@ -1,10 +1,10 @@
-![React File Manager](https://github.com/user-attachments/assets/cad4d71d-a2fd-4064-9fce-c0c3a7cb4613)
+![React File Manager](./docs/screenshots/file-manager-main.png)
 
 <div align="center">
 
-![NPM Downloads](https://img.shields.io/npm/d18m/%40cubone%2Freact-file-manager?style=for-the-badge)
-![npm bundle size](https://img.shields.io/bundlephobia/minzip/%40cubone%2Freact-file-manager?style=for-the-badge)
-![NPM Version](https://img.shields.io/npm/v/%40cubone%2Freact-file-manager?style=for-the-badge&color=%23c87d32)
+![NPM Downloads](https://img.shields.io/npm/dm/%40sush0408%2Freact-file-manager?style=for-the-badge)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/%40sush0408%2Freact-file-manager?style=for-the-badge)
+![NPM Version](https://img.shields.io/npm/v/%40sush0408%2Freact-file-manager?style=for-the-badge&color=%236155b4)
 
 </div>
 
@@ -28,14 +28,14 @@ An open-source React.js package for easy integration of a file manager into appl
 - **Drag-and-Drop**: Move selected files and folders by dragging them to the desired directory,
   making file organization effortless.
 
-![React File Manager](https://github.com/user-attachments/assets/e68f750b-86bf-450d-b27e-fd3dedebf1bd)
+![React File Manager - Folder View](./docs/screenshots/file-manager-folder-view.png)
 
 ## 🚀 Installation
 
 To install `React File Manager`, use the following command:
 
 ```bash
-npm i @cubone/react-file-manager
+npm i @sush0408/react-file-manager
 ```
 
 ## 💻 Usage
@@ -44,8 +44,8 @@ Here’s a basic example of how to use the File Manager Component in your React 
 
 ```jsx
 import { useState } from "react";
-import { FileManager } from "@cubone/react-file-manager";
-import "@cubone/react-file-manager/dist/style.css";
+import { FileManager } from "@sush0408/react-file-manager";
+import "@sush0408/react-file-manager/style.css";
 
 function App() {
   const [files, setFiles] = useState([

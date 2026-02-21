@@ -6,6 +6,7 @@
   "module": "dist/react-file-manager.es.js",
   "files": [
     "dist/",
+    "docs/",
     "README.md",
     "LICENSE"
   ],
@@ -14,7 +15,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc -p tsconfig.build.json --noEmit && vite build",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
@@ -44,6 +45,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
     "jsdom": "^28.1.0",
+    "playwright": "^1.58.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sass": "^1.77.6",
@@ -65,7 +67,14 @@
     }
   },
   "description": "React File Manager is an open-source, user-friendly component designed to easily manage files and folders within applications. With smooth drag-and-drop functionality, responsive design, and efficient navigation, it simplifies file handling in any React project.",
-  "main": "src/index.js",
+  "main": "dist/react-file-manager.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/react-file-manager.es.js",
+      "require": "./dist/react-file-manager.es.js"
+    },
+    "./style.css": "./dist/style.css"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sush0408/react-file-manager.git"
@@ -77,7 +86,7 @@
     "react-file-explorer",
     "file-explorer"
   ],
-  "author": "sush0408",
+  "author": "Sushil Kumar Singh",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/sush0408/react-file-manager/issues"
