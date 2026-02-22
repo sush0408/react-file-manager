@@ -1,5 +1,5 @@
 import { FiZoomIn, FiZoomOut, FiMaximize } from "react-icons/fi";
-import { MdNavigateBefore, MdNavigateNext, MdFullscreen, MdFullscreenExit } from "react-icons/md";
+import { MdNavigateBefore, MdNavigateNext, MdFullscreen, MdFullscreenExit, MdEdit } from "react-icons/md";
 import { useTranslation } from "../../../contexts/TranslationProvider";
 import "./PreviewControls.scss";
 
@@ -19,6 +19,9 @@ const PreviewControls = ({
   onPrevious,
   onNext,
   showZoomControls,
+  showEditButton,
+  onEdit,
+  isEditMode,
 }) => {
   const t = useTranslation();
 
@@ -34,7 +37,17 @@ const PreviewControls = ({
         <MdNavigateBefore size={20} />
       </button>
 
-      {showZoomControls && (
+      {showEditButton && !isEditMode && (
+        <button
+          className="preview-control-btn"
+          onClick={onEdit}
+          title={t("editImage")}
+          aria-label={t("editImage")}
+        >
+          <MdEdit size={18} />
+        </button>
+      )}
+      {showZoomControls && !isEditMode && (
         <div className="zoom-controls">
           <button
             className="preview-control-btn"

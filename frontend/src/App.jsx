@@ -4,6 +4,7 @@ import { deleteAPI } from "./api/deleteAPI";
 import { downloadFile } from "./api/downloadFileAPI";
 import { copyItemAPI, moveItemAPI } from "./api/fileTransferAPI";
 import { getAllFilesAPI } from "./api/getAllFilesAPI";
+import { updateFileAPI } from "./api/updateFileAPI";
 import { renameAPI } from "./api/renameAPI";
 import "./App.scss";
 import FileManager from "./FileManager/FileManager";
@@ -123,6 +124,16 @@ function App() {
     await downloadFile(files);
   };
 
+  const handleImageEdited = async (blob, file, fileName) => {
+    if (!file?._id) return;
+    const response = await updateFileAPI(file._id, blob, fileName || file.name);
+    if (response?.status === 200) {
+      setFiles((prev) =>
+        prev.map((f) => (f._id === file._id ? { ...f, ...response.data } : f))
+      );
+    }
+  };
+
   const handleCut = (files) => {
     console.log("Moving Files", files);
   };
@@ -156,6 +167,7 @@ function App() {
           onFileOpen={handleFileOpen}
           onSelectionChange={handleSelectionChange}
           onError={handleError}
+          onImageEdited={handleImageEdited}
           layout="grid"
           enableFilePreview
           maxFileSize={10485760}

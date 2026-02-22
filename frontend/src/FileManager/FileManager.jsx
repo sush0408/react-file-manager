@@ -68,6 +68,7 @@ const FileManager = ({
   width = "100%",
   initialPath = "",
   filePreviewComponent,
+  onImageEdited,
   primaryColor = "#6155b4",
   fontFamily = "Nunito Sans, sans-serif",
   language = "en-US",
@@ -98,6 +99,7 @@ const FileManager = ({
   columns: initialColumns,
   onColumnConfigChange,
   onClipboardChange,
+  previewFullScreen = false,
 }) => {
   const [isNavigationPaneOpen, setNavigationPaneOpen] = useState(defaultNavExpanded);
   const triggerAction = useTriggerAction();
@@ -245,9 +247,11 @@ const FileManager = ({
                         maxFileSize={maxFileSize}
                         filePreviewPath={filePreviewPath}
                         filePreviewComponent={filePreviewComponent}
+                        onImageEdited={onImageEdited}
                         acceptedFileTypes={acceptedFileTypes}
                         triggerAction={triggerAction}
                         permissions={permissions}
+                        previewFullScreen={previewFullScreen}
                       />
                       <ClipboardIndicator />
                       <BatchProgress />
@@ -317,6 +321,7 @@ FileManager.propTypes = {
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   initialPath: PropTypes.string,
   filePreviewComponent: PropTypes.func,
+  onImageEdited: PropTypes.func,
   primaryColor: PropTypes.string,
   fontFamily: PropTypes.string,
   language: PropTypes.string,
@@ -358,6 +363,7 @@ FileManager.propTypes = {
   columns: PropTypes.arrayOf(PropTypes.string),
   onColumnConfigChange: PropTypes.func,
   onClipboardChange: PropTypes.func,
+  previewFullScreen: PropTypes.bool,
 };
 
 export default FileManager;

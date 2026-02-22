@@ -310,6 +310,10 @@ export interface FileManagerProps {
   initialPath?: string;
   /** Custom component for rendering file previews */
   filePreviewComponent?: (file: FileItem) => React.ReactElement;
+  /** Callback when an image is edited (crop/rotate/resize). Receives (blob, file, fileName) */
+  onImageEdited?: (blob: Blob, file: FileItem, fileName: string) => void;
+  /** Whether the file preview modal opens full screen. Default: false (50% width) */
+  previewFullScreen?: boolean;
 
   // ---- Theming & Styling ----
   /** Primary accent color */

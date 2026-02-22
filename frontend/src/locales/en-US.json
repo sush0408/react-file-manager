@@ -120,5 +120,11 @@
   "skipped": "skipped",
   "clearClipboard": "Clear Clipboard",
   "batchProgress": "Batch Progress",
-  "externalDrop": "Drop files here"
+  "externalDrop": "Drop files here",
+  "editImage": "Edit Image",
+  "rotateLeft": "Rotate Left",
+  "rotateRight": "Rotate Right",
+  "resize": "Resize",
+  "apply": "Apply",
+  "applying": "Applying..."
 }

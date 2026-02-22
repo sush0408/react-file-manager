@@ -11,9 +11,10 @@ import { FaRegFileAlt } from "react-icons/fa";
 import { useTranslation } from "../../../contexts/TranslationProvider";
 import PreviewControls, { MIN_ZOOM, MAX_ZOOM, ZOOM_STEP } from "./PreviewControls";
 import { CodeViewer, MarkdownViewer, CSVViewer } from "./FileViewers";
+import ImageEditor from "./ImageEditor";
 import "./PreviewFile.action.scss";
 
-const imageExtensions = ["jpg", "jpeg", "png"];
+const imageExtensions = ["jpg", "jpeg", "png", "webp", "gif"];
 const videoExtensions = ["mp4", "mov", "avi"];
 const audioExtensions = ["mp3", "wav", "m4a"];
 const iFrameExtensions = ["txt", "pdf"];
@@ -21,11 +22,13 @@ const codeExtensions = ["js", "jsx", "ts", "tsx", "json", "html", "css", "scss",
 const markdownExtensions = ["md", "markdown"];
 const csvExtensions = ["csv", "tsv"];
 
-const PreviewFileAction = ({ filePreviewPath, filePreviewComponent }) => {
+const PreviewFileAction = ({ filePreviewPath, filePreviewComponent, onImageEdited, fullScreen: modalFullScreen = false }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(100);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editedImageUrl, setEditedImageUrl] = useState(null);
 
   const { selectedFiles, setSelectedFiles, handleDownload: triggerDownload } = useSelection();
   const { currentPathFiles } = useFileNavigation();
@@ -79,10 +82,34 @@ const PreviewFileAction = ({ filePreviewPath, filePreviewComponent }) => {
         setIsLoading(true);
         setHasError(false);
         setZoomLevel(100);
+        setIsEditMode(false);
+        setEditedImageUrl(null);
       }
     },
     [navigableFiles, setSelectedFiles]
   );
+
+  const handleImageEdited = useCallback(
+    (blob, name) => {
+      setEditedImageUrl((prev) => {
+        if (prev) URL.revokeObjectURL(prev);
+        return URL.createObjectURL(blob);
+      });
+      setIsEditMode(false);
+      onImageEdited?.(blob, currentFile, name);
+    },
+    [currentFile, onImageEdited]
+  );
+
+  useEffect(() => {
+    return () => {
+      if (editedImageUrl) URL.revokeObjectURL(editedImageUrl);
+    };
+  }, [editedImageUrl]);
+
+  const handleCancelEdit = useCallback(() => {
+    setIsEditMode(false);
+  }, []);
 
   const handlePrevious = useCallback(() => {
     navigateTo(currentFileIndex - 1);
@@ -187,8 +214,10 @@ const PreviewFileAction = ({ filePreviewPath, filePreviewComponent }) => {
     ...csvExtensions,
   ].includes(extension);
 
+  const useFullscreenLayout = modalFullScreen || isFullscreen;
+
   return (
-    <div ref={previewRef} className={`preview-wrapper ${isFullscreen ? "preview-fullscreen" : ""}`}>
+    <div ref={previewRef} className={`preview-wrapper ${useFullscreenLayout ? "preview-fullscreen" : ""}`}>
       <section className={`file-previewer ${extension === "pdf" ? "pdf-previewer" : ""}`}>
         {(hasError || !isSupported) && (
           <div className="preview-error">
@@ -209,18 +238,29 @@ const PreviewFileAction = ({ filePreviewPath, filePreviewComponent }) => {
         )}
         {isImage && !hasError && (
           <>
-            <Loader isLoading={isLoading} />
-            <div className="image-zoom-container">
-              <img
-                src={filePath}
-                alt="Preview Unavailable"
-                className={`photo-popup-image ${isLoading ? "img-loading" : ""}`}
-                style={{ transform: `scale(${zoomLevel / 100})`, transformOrigin: "center center" }}
-                onLoad={handleImageLoad}
-                onError={handleImageError}
-                loading="lazy"
+            {isEditMode ? (
+              <ImageEditor
+                src={editedImageUrl || filePath}
+                fileName={currentFile?.name}
+                onApply={handleImageEdited}
+                onCancel={handleCancelEdit}
               />
-            </div>
+            ) : (
+              <>
+                <Loader isLoading={isLoading} />
+                <div className="image-zoom-container">
+                  <img
+                    src={editedImageUrl || filePath}
+                    alt="Preview Unavailable"
+                    className={`photo-popup-image ${isLoading ? "img-loading" : ""}`}
+                    style={{ transform: `scale(${zoomLevel / 100})`, transformOrigin: "center center" }}
+                    onLoad={handleImageLoad}
+                    onError={handleImageError}
+                    loading="lazy"
+                  />
+                </div>
+              </>
+            )}
           </>
         )}
         {videoExtensions.includes(extension) && (
@@ -262,6 +302,9 @@ const PreviewFileAction = ({ filePreviewPath, filePreviewComponent }) => {
         onPrevious={handlePrevious}
         onNext={handleNext}
         showZoomControls={showZoomControls}
+        showEditButton={isImage}
+        onEdit={() => setIsEditMode(true)}
+        isEditMode={isEditMode}
       />
     </div>
   );

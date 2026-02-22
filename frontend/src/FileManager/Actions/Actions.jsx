@@ -18,9 +18,11 @@ const Actions = ({
   maxFileSize,
   filePreviewPath,
   filePreviewComponent,
+  onImageEdited,
   acceptedFileTypes,
   triggerAction,
   permissions,
+  previewFullScreen = false,
 }) => {
   const [activeAction, setActiveAction] = useState(null);
   const { selectedFiles } = useSelection();
@@ -54,9 +56,12 @@ const Actions = ({
         <PreviewFileAction
           filePreviewPath={filePreviewPath}
           filePreviewComponent={filePreviewComponent}
+          onImageEdited={onImageEdited}
+          fullScreen={previewFullScreen}
         />
       ),
-      width: "50%",
+      width: previewFullScreen ? "100vw" : "50%",
+      fullScreen: previewFullScreen,
     },
   };
 
@@ -79,6 +84,7 @@ const Actions = ({
         show={triggerAction.isActive}
         setShow={triggerAction.close}
         dialogWidth={activeAction.width}
+        fullScreen={activeAction.fullScreen}
       >
         <Suspense fallback={<Loader loading={true} />}>
           {activeAction?.component}

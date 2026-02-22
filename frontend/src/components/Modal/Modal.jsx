@@ -9,6 +9,7 @@ const Modal = ({
   setShow,
   heading,
   dialogWidth = "25%",
+  fullScreen = false,
   contentClassName = "",
   closeButton = true,
 }) => {
@@ -29,11 +30,15 @@ const Modal = ({
     }
   }, [show]);
 
+  const dialogStyle = fullScreen
+    ? { width: "100vw", height: "100vh", maxWidth: "100vw", maxHeight: "100vh", margin: 0 }
+    : { width: dialogWidth };
+
   return (
     <dialog
       ref={modalRef}
-      className={`fm-modal dialog`}
-      style={{ width: dialogWidth }}
+      className={`fm-modal dialog ${fullScreen ? "fm-modal-fullscreen" : ""}`}
+      style={dialogStyle}
       onKeyDown={handleKeyDown}
       aria-modal="true"
       aria-labelledby="fm-modal-heading-id"
@@ -49,7 +54,11 @@ const Modal = ({
           />
         )}
       </div>
-      {children}
+      {fullScreen ? (
+        <div className="fm-modal-content fm-modal-content-fullscreen">{children}</div>
+      ) : (
+        children
+      )}
     </dialog>
   );
 };

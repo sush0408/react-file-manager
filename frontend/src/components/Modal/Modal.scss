@@ -23,6 +23,25 @@
   }
 }
 
+.fm-modal-fullscreen {
+  border-radius: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+
+  .fm-modal-header {
+    flex-shrink: 0;
+  }
+
+  .fm-modal-content-fullscreen {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 @keyframes expand {
   from {
     transform: scale(0.4);
